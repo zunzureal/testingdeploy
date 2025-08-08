@@ -2,13 +2,7 @@
     background-image: url('~leaflet/dist/images/layers.png') !important;
 }
 
-@font-face {
-    font-family: 'THSarabun';
-    src: url('/fonts/THSarabun.ttf') format('truetype');
-    font-weight: bold;
-    font-style: normal;
-    text-transform: uppercase;
-}
+/* Remove the problematic @font-face declaration for now - fonts should be loaded via index.html */
 
 body,
 .map-container,
