@@ -2,7 +2,6 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://rmutsv007.github.io/Land_2",
   "dependencies": {
     "browserify-zlib": "^0.2.0",
     "buffer": "^6.0.3",
