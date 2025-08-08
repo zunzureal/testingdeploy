@@ -8,13 +8,6 @@ import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: markerIcon2x,
-  iconUrl: markerIcon,
-  shadowUrl: markerShadow,
-});
-
 import BaseMap from './layer/BaseMap';
 import LandList from './LandList';
 import Forest from './layer/Forest';
@@ -23,18 +16,22 @@ import Intersec from './layer/Intersec';
 import Land from './layer/Land';
 import RMUTSV from './layer/RMUTSV';
 import CSVFileLocal from './layer/CSVFileLocal'; 
-
-
-
 import MapLegend from './MapLegend';
 import MapPopup from './MapPopup';
 import MapZoomToFeature from './MapZoomToFeature';
+import customIconUrl from './images/Marker.png';
+
 import 'leaflet/dist/leaflet.css';
 import 'leaflet.pattern';
 import './map.css';
 
- 
-import customIconUrl from './images/Marker.png';
+// Configure Leaflet default icons
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl: markerIcon2x,
+  iconUrl: markerIcon,
+  shadowUrl: markerShadow,
+});
 
 const CustomIcon = L.icon({
     iconUrl: customIconUrl,
