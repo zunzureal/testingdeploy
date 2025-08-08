@@ -1,0 +1,17 @@
+.leaflet-control-layers-toggle {
+    background-image: url('leaflet/dist/images/map.png') !important;
+}
+
+@font-face {
+    font-family: 'THSarabun';
+    src: url('/public/fonts/THSarabun.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    text-transform: uppercase;
+}
+
+body,
+.map-container,
+.leaflet-container {
+    font-family: 'iannnnnPDF2008', sans-serif;
+}

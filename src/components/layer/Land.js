@@ -1,0 +1,43 @@
+import React from 'react';
+import { GeoJSON } from 'react-leaflet';
+import LandData from '../data/Land.json';
+
+const Land = ({ onSelectFeature }) => {
+    const onEachFeature = (feature, layer) => {
+        const ownerName = feature.properties.ชื่อเจ้าของสวนยางพารา || "ไม่ระบุ";
+
+        // แสดง Tooltip เมื่อ Hover
+        layer.on('mouseover', function () {
+            layer.bindTooltip(ownerName, { direction: 'top', permanent: false }).openTooltip();
+            layer.setStyle({
+                fillColor: 'yellow'
+            });
+        });
+
+        layer.on('mouseout', function () {
+            layer.closeTooltip();
+            layer.setStyle({
+                fillColor: 'pink'
+            });
+        });
+
+        // คลิกเลือกพื้นที่ทับซ้อน
+        layer.on('click', () => onSelectFeature(feature));
+    };
+
+    return (
+        <GeoJSON
+            data={LandData}
+            style={{
+                weight: 1,
+                color: 'black',
+                fillColor: 'pink',
+                fillOpacity: 1,
+                zIndex: 5000,
+            }}
+            onEachFeature={onEachFeature}
+        />
+    );
+};
+
+export default Land;
