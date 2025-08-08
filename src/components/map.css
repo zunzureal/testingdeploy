@@ -1,10 +1,10 @@
 .leaflet-control-layers-toggle {
-    background-image: url('leaflet/dist/images/map.png') !important;
+    background-image: url('~leaflet/dist/images/layers.png') !important;
 }
 
 @font-face {
     font-family: 'THSarabun';
-    src: url('/public/fonts/THSarabun.ttf') format('truetype');
+    src: url('/fonts/THSarabun.ttf') format('truetype');
     font-weight: bold;
     font-style: normal;
     text-transform: uppercase;
