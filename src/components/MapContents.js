@@ -43,6 +43,7 @@ const MapContents = () => {
     const [selectedFeature, setSelectedFeature] = useState(null);
     const [markerPosition, setMarkerPosition] = useState(null);
     const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+    const [popupInfo, setPopupInfo] = useState({ feature: null, position: null });
 
     useEffect(() => {
         document.title = "แผนที่แสดงเอกสารสิทธิ์และพื้นที่ทับซ้อน";
@@ -52,11 +53,25 @@ const MapContents = () => {
         if (!selectedFeature) {
             setMarkerPosition(null);
         }
+        // ปิด popup เมื่อคลิกที่แผนที่
+        setPopupInfo({ feature: null, position: null });
     };
 
     const handleClosePopup = () => {
         setSelectedFeature(null);
         setMarkerPosition(null);
+        setPopupInfo({ feature: null, position: null });
+    };
+
+    const handleMarkerClick = (item) => {
+        // ปิด popup เก่าก่อนเปิดใหม่
+        setPopupInfo({ feature: null, position: null });
+        setTimeout(() => {
+            setPopupInfo({ 
+                feature: item, 
+                position: [parseFloat(item.lat), parseFloat(item.long)] 
+            });
+        }, 0);
     };
 
     const handleSelectFeature = (feature) => {
@@ -161,17 +176,17 @@ const MapContents = () => {
                         </LayersControl.Overlay>
                         <LayersControl.Overlay name="สิทธิ 30 บาท" checked>
                             <LayerGroup>
-                                <CSVFileLocal type="thirty" />
+                                <CSVFileLocal type="thirty" onMarkerClick={handleMarkerClick} />
                             </LayerGroup>
                         </LayersControl.Overlay>
                         <LayersControl.Overlay name="สิทธิประกันสังคม" checked>
                             <LayerGroup>
-                                <CSVFileLocal type="ss" />
+                                <CSVFileLocal type="ss" onMarkerClick={handleMarkerClick} />
                             </LayerGroup>
                         </LayersControl.Overlay>
                         <LayersControl.Overlay name="ใช้ได้ทั้ง 2 สิทธิ์" checked>
                             <LayerGroup>
-                                <CSVFileLocal type="both" />
+                                <CSVFileLocal type="both" onMarkerClick={handleMarkerClick} />
                             </LayerGroup>
                         </LayersControl.Overlay>
                         {/* เพิ่มเลเยอร์อื่น ๆ ที่นี่ */}
@@ -181,6 +196,9 @@ const MapContents = () => {
                     <MapLegend />
                     
                     {selectedFeature && <MapPopup feature={selectedFeature} markerPosition={markerPosition} onClose={handleClosePopup} />}
+                    {popupInfo.feature && popupInfo.position && (
+                        <MapPopup feature={popupInfo.feature} markerPosition={popupInfo.position} onClose={() => setPopupInfo({ feature: null, position: null })} />
+                    )}
                     {/* ไม่ต้องแสดง Marker ซ้ำ ให้ซูมไปยัง point อย่างเดียว */}
                 </MapContainer>
             </div>
