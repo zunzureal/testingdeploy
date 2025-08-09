@@ -78,8 +78,8 @@ const CSVFileLocal = (props) => {
 const { type } = props;
 let markers = [];
 
-const filterAndOmitColumns = (items) =>
-    items.map(({ "สิทธิประกันสุขภาพ 30 บาท": thirty, "สิทธิประกันสังคม": ss, ...rest }) => rest); // ลบคอลัมน์สิทธิ์
+// ไม่ลบคอลัมน์สิทธิ์ออก เพื่อให้แสดงใน popup
+const filterAndOmitColumns = (items) => items;
 
 if (type === "thirty") {
     // รับ 30 บาท แต่ไม่รับประกันสังคม
