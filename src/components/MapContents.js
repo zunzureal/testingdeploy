@@ -124,7 +124,7 @@ const MapContents = () => {
             {isSidebarVisible && (
                 <div style={{
                     flex: isMobile ? 'none' : 1,
-                    width: isMobile ? '180px' : '180px', // ลดขนาด desktop จาก 220px เป็น 180px (ลดลงครึ่งหนึ่งจากเดิม)
+                    width: isMobile ? '180px' : '80px', // ลดขนาด desktop จาก 220px เป็น 180px (ลดลงครึ่งหนึ่งจากเดิม)
                     height: '100vh',
                     padding: isMobile ? '8px' : '10px',
                     fontSize: isMobile ? '14px' : '18px',
@@ -140,7 +140,7 @@ const MapContents = () => {
                             alt="Logo" 
                             style={{ 
                                 height: isMobile ? '50px' : '80px', // ลดขนาดโลโก้ desktop จาก 120px เป็น 80px
-                                maxWidth: '100%',
+                                maxWidth: '100px',
                                 objectFit: 'contain'
                             }} 
                         />
