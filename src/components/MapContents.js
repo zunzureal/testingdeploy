@@ -124,7 +124,7 @@ const MapContents = () => {
             {isSidebarVisible && (
                 <div style={{
                     flex: isMobile ? 'none' : 1,
-                    width: isMobile ? '280px' : 'auto', // กำหนดความกว้างคงที่ในมือถือ
+                    width: isMobile ? '220px' : '300px', // ลดขนาดจาก 280px เป็น 220px (มือถือ) และเดสก์ท็อปเป็น 300px
                     height: '100vh',
                     overflow: 'auto', // ให้เลื่อนได้เมื่อเนื้อหาเยอะ
                     padding: isMobile ? '8px' : '10px',
@@ -140,17 +140,17 @@ const MapContents = () => {
                             src={`${process.env.PUBLIC_URL}/assets/logo.png`} 
                             alt="Logo" 
                             style={{ 
-                                height: isMobile ? '60px' : '150px', // ลดขนาดโลโก้ในมือถือ
+                                height: isMobile ? '50px' : '120px', // ลดขนาดโลโก้เพิ่มเติม
                                 maxWidth: '100%',
                                 objectFit: 'contain'
                             }} 
                         />
                     </p>
                     <p style={{ 
-                        fontSize: isMobile ? '14px' : '24px', 
+                        fontSize: isMobile ? '12px' : '20px', // ลดขนาดข้อความ
                         color: 'black', 
-                        lineHeight: '1.4',
-                        margin: isMobile ? '5px 0' : '10px 0'
+                        lineHeight: '1.3',
+                        margin: isMobile ? '3px 0' : '8px 0'
                     }}>
                         คลินิกและร้านขายยา<br />สิทธิ 30 บาท และประกันสังคม
                     </p>
