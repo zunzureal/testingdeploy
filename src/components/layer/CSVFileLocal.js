@@ -13,14 +13,12 @@ const iconShadow = process.env.PUBLIC_URL + '/assets/marker-shadow.png'
 // สร้าง icon สำหรับแต่ละประเภท
 const ClinicIcon = L.icon({
     iconUrl: iconclinic,
-    shadowUrl: iconShadow,
     iconSize: [60, 60],
     iconAnchor: [25.5, 20.5]
 })
 
 const PharmacyIcon = L.icon({
     iconUrl: iconpharmacy,
-    shadowUrl: iconShadow,
     iconSize: [60, 60],
     iconAnchor: [25.5, 20.5]
 })
