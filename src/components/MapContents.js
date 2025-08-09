@@ -124,7 +124,7 @@ const MapContents = () => {
             {isSidebarVisible && (
                 <div style={{
                     flex: isMobile ? 'none' : 1,
-                    width: isMobile ? '150px' : '180px', // ลดขนาด desktop จาก 220px เป็น 180px (ลดลงครึ่งหนึ่งจากเดิม)
+                    width: isMobile ? '180px' : '180px', // ลดขนาด desktop จาก 220px เป็น 180px (ลดลงครึ่งหนึ่งจากเดิม)
                     height: '100vh',
                     overflow: 'auto', // ให้เลื่อนได้เมื่อเนื้อหาเยอะ
                     padding: isMobile ? '8px' : '10px',
@@ -199,7 +199,7 @@ const MapContents = () => {
                         boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
                         backdropFilter: 'blur(5px)'
                     }}>
-                        {isMobile ? 'เมนู' : '◄ แสดงเมนู'}
+                        {isMobile ? 'เมนู' : '◄ เมนู'}
                     </button>
                 )}
                 <MapContainer
