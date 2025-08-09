@@ -88,13 +88,13 @@ const LandList = ({ onSelectFeature }) => {
                 onChange={handleSearchChange}
                 style={{
                     width: '100%',
-                    padding: isMobile ? '8px' : '12px',
+                    padding: isMobile ? '8px' : '6px', // ลดขนาด padding สำหรับ desktop จาก 12px เป็น 6px
                     fontWeight: 'normal',
-                    marginBottom: isMobile ? '5px' : '10px',
+                    marginBottom: isMobile ? '5px' : '5px', // ลด margin สำหรับ desktop จาก 10px เป็น 5px
                     borderRadius: '5px',
                     border: '1px solid #ccc',
                     fontFamily: "'THSarabun', sans-serif",
-                    fontSize: isMobile ? '14px' : '16px',
+                    fontSize: isMobile ? '14px' : '14px', // ลดขนาดฟอนต์ desktop จาก 16px เป็น 14px
                     boxSizing: 'border-box'
                 }}
             />
