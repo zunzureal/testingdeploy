@@ -53,19 +53,22 @@ const MapPopup = ({ feature, onClose, popupInfo }) => {
     return (
         <div style={{
             position: 'absolute',
-            bottom: isMobile ? '10px' : '20px',
-            right: isMobile ? '10px' : '20px',
-            left: isMobile ? '10px' : 'auto',
+            bottom: isMobile ? '5px' : '20px',
+            right: isMobile ? '5px' : '20px',
+            left: isMobile ? '5px' : 'auto',
             background: 'white',
-            padding: isMobile ? '15px' : '20px',
+            padding: isMobile ? '10px' : '20px',
             borderRadius: '8px',
             boxShadow: '0 4px 15px rgba(0,0,0,0.3)',
             zIndex: 9999,
             maxWidth: isMobile ? 'none' : '350px',
             width: isMobile ? 'auto' : 'auto',
-            maxHeight: isMobile ? '50vh' : '70vh',
+            maxHeight: isMobile ? '60vh' : '70vh', // เพิ่มความสูงในมือถือ
             overflowY: 'auto',
-            fontFamily: "'THSarabun', sans-serif"
+            fontFamily: "'THSarabun', sans-serif",
+            // เพิ่ม CSS สำหรับ smooth scrolling
+            scrollBehavior: 'smooth',
+            WebkitOverflowScrolling: 'touch' // สำหรับ iOS
         }}>
             <button onClick={onClose} style={{
                 position: 'absolute',

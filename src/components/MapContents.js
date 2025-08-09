@@ -124,7 +124,7 @@ const MapContents = () => {
             {isSidebarVisible && (
                 <div style={{
                     flex: isMobile ? 'none' : 1,
-                    width: isMobile ? '220px' : '300px', // ลดขนาดจาก 280px เป็น 220px (มือถือ) และเดสก์ท็อปเป็น 300px
+                    width: isMobile ? '220px' : '270px', // ลดขนาดจาก 280px เป็น 220px (มือถือ) และเดสก์ท็อปเป็น 300px
                     height: '100vh',
                     overflow: 'auto', // ให้เลื่อนได้เมื่อเนื้อหาเยอะ
                     padding: isMobile ? '8px' : '10px',
@@ -185,18 +185,21 @@ const MapContents = () => {
                     <button onClick={toggleSidebar} style={{
                         position: 'absolute',
                         zIndex: 1000,
-                        top: '10px',
+                        top: isMobile ? '10px' : '50%',
                         left: '10px',
-                        backgroundColor: 'white',
+                        transform: isMobile ? 'none' : 'translateY(-50%)',
+                        backgroundColor: 'rgba(255, 255, 255, 0.95)',
                         color: 'black',
-                        border: '1px solid black',
-                        borderRadius: '5px',
-                        padding: isMobile ? '8px 12px' : '10px 15px',
+                        border: '2px solid #333',
+                        borderRadius: '8px',
+                        padding: isMobile ? '8px 12px' : '12px 18px',
                         cursor: 'pointer',
                         fontSize: isMobile ? '14px' : '16px',
-                        boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
+                        fontWeight: 'bold',
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+                        backdropFilter: 'blur(5px)'
                     }}>
-                        {isMobile ? 'เมนู' : 'แสดงเมนู'}
+                        {isMobile ? 'เมนู' : '◄ แสดงเมนู'}
                     </button>
                 )}
                 <MapContainer

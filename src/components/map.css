@@ -42,6 +42,13 @@ body,
         margin-right: 10px !important;
         margin-top: 10px !important;
     }
+    
+    /* แก้ไข popup scrolling ในมือถือ */
+    .leaflet-popup-content-wrapper {
+        max-height: 60vh !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
 }
 
 @media (max-width: 480px) {
