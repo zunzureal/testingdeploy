@@ -76,12 +76,29 @@ if (type === "thirty") {
         )
     );
 } else if (type === "ss") {
-    markers = filterAndOmitColumns(
-        data.filter(item =>
-            item["สิทธิประกันสังคม"] && item["สิทธิประกันสังคม"] !== "ไม่รับสิทธิ์" &&
-            (!item["สิทธิประกันสุขภาพ 30 บาท"] || item["สิทธิประกันสุขภาพ 30 บาท"] === "ไม่รับสิทธิ์")
-        )
-    );
+    console.log("Debug SS - Total data:", data.length);
+    console.log("Debug SS - Sample data:", data.slice(0, 3));
+    
+    const filtered = data.filter(item => {
+        const hasSSRight = item["สิทธิประกันสังคม"] && item["สิทธิประกันสังคม"] !== "ไม่รับสิทธิ์";
+        const noThirtyRight = !item["สิทธิประกันสุขภาพ 30 บาท"] || item["สิทธิประกันสุขภาพ 30 บาท"] === "ไม่รับสิทธิ์";
+        
+        if (hasSSRight) {
+            console.log("Debug SS - Found SS item:", {
+                name: item["ชื่อ"],
+                ssValue: item["สิทธิประกันสังคม"],
+                thirtyValue: item["สิทธิประกันสุขภาพ 30 บาท"],
+                hasSSRight,
+                noThirtyRight,
+                passFilter: hasSSRight && noThirtyRight
+            });
+        }
+        
+        return hasSSRight && noThirtyRight;
+    });
+    
+    console.log("Debug SS - Filtered items:", filtered.length, filtered);
+    markers = filterAndOmitColumns(filtered);
 } else if (type === "both") {
     markers = filterAndOmitColumns(
         data.filter(item =>
