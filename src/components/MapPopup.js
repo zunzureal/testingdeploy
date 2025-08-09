@@ -145,8 +145,19 @@ const MapPopup = ({ feature, onClose, popupInfo }) => {
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center'
-            }}>📷</button>
+                justifyContent: 'center',
+                padding: '0'
+            }}>
+                <img 
+                    src="/assets/downloadfolder.jpeg" 
+                    alt="บันทึกภาพ" 
+                    style={{
+                        width: isMobile ? '16px' : '18px',
+                        height: isMobile ? '16px' : '18px',
+                        objectFit: 'contain'
+                    }}
+                />
+            </button>
             <div id="popup-print-content" style={{ 
                 margin: 0, 
                 padding: 0, 

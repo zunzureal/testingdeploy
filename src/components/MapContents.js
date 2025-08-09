@@ -126,7 +126,6 @@ const MapContents = () => {
                     flex: isMobile ? 'none' : 1,
                     width: isMobile ? '180px' : '180px', // ลดขนาด desktop จาก 220px เป็น 180px (ลดลงครึ่งหนึ่งจากเดิม)
                     height: '100vh',
-                    overflow: 'auto', // ให้เลื่อนได้เมื่อเนื้อหาเยอะ
                     padding: isMobile ? '8px' : '10px',
                     fontSize: isMobile ? '14px' : '18px',
                     fontFamily: "'THSarabun', sans-serif",
