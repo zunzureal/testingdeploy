@@ -82,42 +82,44 @@ const filterAndOmitColumns = (items) =>
     items.map(({ "สิทธิประกันสุขภาพ 30 บาท": thirty, "สิทธิประกันสังคม": ss, ...rest }) => rest); // ลบคอลัมน์สิทธิ์
 
 if (type === "thirty") {
+    // รับ 30 บาท แต่ไม่รับประกันสังคม
     markers = filterAndOmitColumns(
         data.filter(item =>
-            item["สิทธิประกันสุขภาพ 30 บาท"] && item["สิทธิประกันสุขภาพ 30 บาท"] !== "ไม่รับสิทธิ์" &&
+            item["สิทธิประกันสุขภาพ 30 บาท"] && item["สิทธิประกันสุขภาพ 30 บาท"] !== "ไม่รับสิทธ์" &&
             (!item["สิทธิประกันสังคม"] || item["สิทธิประกันสังคม"] === "ไม่รับสิทธิ์")
         )
     );
 } else if (type === "ss") {
-    console.log("Debug SS - Total data:", data.length);
-    console.log("Debug SS - Sample data:", data.slice(0, 3));
-    
+    // รับประกันสังคม แต่ไม่รับ 30 บาท 
     const filtered = data.filter(item => {
         const hasSSRight = item["สิทธิประกันสังคม"] && item["สิทธิประกันสังคม"] !== "ไม่รับสิทธิ์";
-        // เปลี่ยนเงื่อนไข: แสดงทุกคลินิกที่รับประกันสังคม (ไม่ว่าจะรับ 30 บาทด้วยหรือไม่)
+        const hasThirtyRight = item["สิทธิประกันสุขภาพ 30 บาท"] && item["สิทธิประกันสุขภาพ 30 บาท"] !== "ไม่รับสิทธ์";
         
-        if (hasSSRight) {
-            console.log("Debug SS - Found SS item:", {
-                name: item["ชื่อ"],
-                ssValue: item["สิทธิประกันสังคม"],
-                thirtyValue: item["สิทธิประกันสุขภาพ 30 บาท"],
-                hasSSRight,
-                passFilter: hasSSRight
-            });
-        }
-        
-        return hasSSRight;
+        // รับประกันสังคม แต่ไม่รับ 30 บาท
+        return hasSSRight && !hasThirtyRight;
     });
     
-    console.log("Debug SS - Filtered items:", filtered.length, filtered);
+    console.log("Debug SS - Filtered items (SS only):", filtered.length, filtered.map(item => ({
+        name: item["ชื่อ"],
+        ss: item["สิทธิประกันสังคม"],
+        thirty: item["สิทธิประกันสุขภาพ 30 บาท"]
+    })));
     markers = filterAndOmitColumns(filtered);
 } else if (type === "both") {
-    markers = filterAndOmitColumns(
-        data.filter(item =>
-            item["สิทธิประกันสุขภาพ 30 บาท"] && item["สิทธิประกันสุขภาพ 30 บาท"] !== "ไม่รับสิทธิ์" &&
-            item["สิทธิประกันสังคม"] && item["สิทธิประกันสังคม"] !== "ไม่รับสิทธิ์"
-        )
-    );
+    // รับทั้ง 30 บาท และ ประกันสังคม
+    const filtered = data.filter(item => {
+        const hasSSRight = item["สิทธิประกันสังคม"] && item["สิทธิประกันสังคม"] !== "ไม่รับสิทธิ์";
+        const hasThirtyRight = item["สิทธิประกันสุขภาพ 30 บาท"] && item["สิทธิประกันสุขภาพ 30 บาท"] !== "ไม่รับสิทธ์";
+        
+        return hasSSRight && hasThirtyRight;
+    });
+    
+    console.log("Debug Both - Filtered items (Both rights):", filtered.length, filtered.map(item => ({
+        name: item["ชื่อ"],
+        ss: item["สิทธิประกันสังคม"],
+        thirty: item["สิทธิประกันสุขภาพ 30 บาท"]
+    })));
+    markers = filterAndOmitColumns(filtered);
 } else {
     markers = filterAndOmitColumns(data);
 }
