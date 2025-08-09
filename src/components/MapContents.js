@@ -124,7 +124,7 @@ const MapContents = () => {
             {isSidebarVisible && (
                 <div style={{
                     flex: isMobile ? 'none' : 1,
-                    width: isMobile ? '150px' : '220px', // ลดขนาดจาก 280px เป็น 220px (มือถือ) และเดสก์ท็อปเป็น 300px
+                    width: isMobile ? '150px' : '180px', // ลดขนาด desktop จาก 220px เป็น 180px (ลดลงครึ่งหนึ่งจากเดิม)
                     height: '100vh',
                     overflow: 'auto', // ให้เลื่อนได้เมื่อเนื้อหาเยอะ
                     padding: isMobile ? '8px' : '10px',
@@ -140,17 +140,17 @@ const MapContents = () => {
                             src={`${process.env.PUBLIC_URL}/assets/logo.png`} 
                             alt="Logo" 
                             style={{ 
-                                height: isMobile ? '50px' : '120px', // ลดขนาดโลโก้เพิ่มเติม
+                                height: isMobile ? '50px' : '80px', // ลดขนาดโลโก้ desktop จาก 120px เป็น 80px
                                 maxWidth: '100%',
                                 objectFit: 'contain'
                             }} 
                         />
                     </p>
                     <p style={{ 
-                        fontSize: isMobile ? '12px' : '20px', // ลดขนาดข้อความ
+                        fontSize: isMobile ? '12px' : '16px', // ลดขนาดข้อความ desktop จาก 20px เป็น 16px
                         color: 'black', 
                         lineHeight: '1.3',
-                        margin: isMobile ? '3px 0' : '8px 0'
+                        margin: isMobile ? '3px 0' : '6px 0' // ลด margin desktop นิดหน่อย
                     }}>
                         คลินิกและร้านขายยา<br />สิทธิ 30 บาท และประกันสังคม
                     </p>
@@ -160,16 +160,16 @@ const MapContents = () => {
                     <button onClick={toggleSidebar} style={{
                         position: 'absolute',
                         zIndex: 1000,
-                        top: isMobile ? '5px' : '50%',
-                        right: isMobile ? '5px' : '-50px',
-                        transform: isMobile ? 'none' : 'translateY(-50%)',
+                        top: '5px', // ย้ายไปมุมบนขวาทั้ง mobile และ desktop
+                        right: '5px', // ย้ายไปมุมบนขวาทั้ง mobile และ desktop
+                        transform: 'none', // ไม่ใช้ transform แล้ว
                         backgroundColor: 'white',
                         color: 'black',
                         border: '1px solid black',
                         borderRadius: '5px',
-                        padding: isMobile ? '5px 8px' : '10px',
+                        padding: isMobile ? '5px 8px' : '8px 10px', // เพิ่ม padding นิดหน่อยสำหรับ desktop
                         cursor: 'pointer',
-                        fontSize: isMobile ? '12px' : '16px'
+                        fontSize: isMobile ? '12px' : '14px' // ลดขนาดฟอนต์ desktop นิดหน่อย
                     }}>
                         ×
                     </button>
