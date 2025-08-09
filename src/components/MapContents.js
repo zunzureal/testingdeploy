@@ -124,7 +124,7 @@ const MapContents = () => {
             {isSidebarVisible && (
                 <div style={{
                     flex: isMobile ? 'none' : 1,
-                    width: isMobile ? '220px' : '270px', // ลดขนาดจาก 280px เป็น 220px (มือถือ) และเดสก์ท็อปเป็น 300px
+                    width: isMobile ? '150px' : '220px', // ลดขนาดจาก 280px เป็น 220px (มือถือ) และเดสก์ท็อปเป็น 300px
                     height: '100vh',
                     overflow: 'auto', // ให้เลื่อนได้เมื่อเนื้อหาเยอะ
                     padding: isMobile ? '8px' : '10px',
@@ -161,7 +161,7 @@ const MapContents = () => {
                         position: 'absolute',
                         zIndex: 1000,
                         top: isMobile ? '5px' : '50%',
-                        right: isMobile ? '5px' : '100px',
+                        right: isMobile ? '5px' : '-50px',
                         transform: isMobile ? 'none' : 'translateY(-50%)',
                         backgroundColor: 'white',
                         color: 'black',
@@ -171,7 +171,7 @@ const MapContents = () => {
                         cursor: 'pointer',
                         fontSize: isMobile ? '12px' : '16px'
                     }}>
-                        {isMobile ? '×' : '<'}
+                        ×
                     </button>
                 </div>
             )}
