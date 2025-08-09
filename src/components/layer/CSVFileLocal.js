@@ -57,6 +57,11 @@ const CSVFileLocal = (props) => {
 
         const combined = [...filterData1, ...filterData2]
         setData(combined)
+        
+        // Debug: ดูข้อมูลที่โหลดเข้ามา
+        console.log("All loaded data:", combined.length, combined);
+        console.log("Sample item:", combined[0]);
+        console.log("Available columns:", combined[0] ? Object.keys(combined[0]) : 'No data');
     }
 
   const { type } = props;
@@ -67,10 +72,34 @@ const CSVFileLocal = (props) => {
             (!item["สิทธิประกันสังคม"] || item["สิทธิประกันสังคม"] === "ไม่รับสิทธิ์")
         );
     } else if (type === "ss") {
-        markers = data.filter(item =>
-            item["สิทธิประกันสังคม"] && item["สิทธิประกันสังคม"] !== "ไม่รับสิทธิ์" && item["สิทธิประกันสังคม"] !== "" &&
-            (!item["สิทธิประกันสุขภาพ 30 บาท"] || item["สิทธิประกันสุขภาพ 30 บาท"] === "ไม่รับสิทธิ์")
-        );
+        // Debug: ดูข้อมูลก่อนกรอง
+        console.log("Before filtering for SS:", data.length);
+        data.forEach((item, index) => {
+            if (index < 5) { // แสดงแค่ 5 รายการแรก
+                console.log(`Item ${index}:`, {
+                    name: item["ชื่อ"],
+                    ss_value: item["สิทธิประกันสังคม"],
+                    thirty_value: item["สิทธิประกันสุขภาพ 30 บาท"]
+                });
+            }
+        });
+        
+        markers = data.filter(item => {
+            const hasSSRight = item["สิทธิประกันสังคม"] && 
+                             item["สิทธิประกันสังคม"] !== "ไม่รับสิทธิ์" && 
+                             item["สิทธิประกันสังคม"].trim() !== "";
+            const noThirtyRight = !item["สิทธิประกันสุขภาพ 30 บาท"] || 
+                                 item["สิทธิประกันสุขภาพ 30 บาท"] === "ไม่รับสิทธิ์";
+            
+            console.log("Filtering:", item["ชื่อ"], {
+                hasSSRight,
+                noThirtyRight,
+                ssValue: item["สิทธิประกันสังคม"],
+                thirtyValue: item["สิทธิประกันสุขภาพ 30 บาท"]
+            });
+            
+            return hasSSRight && noThirtyRight;
+        });
         console.log("สิทธิประกันสังคม markers:", markers.length, markers);
     } else if (type === "both") {
         markers = data.filter(item =>
