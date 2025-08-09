@@ -29,7 +29,7 @@ const MapLegend = () => {
                         font-size: ${isMobile ? '13px' : '15px'};
                         color: #333;
                         text-align: center;
-                    "><strong>สัญลักษณ์</strong></p>
+                    "><strong>คำอธิบายสัญลักษณ์</strong></p>
                     <div style="
                         display: flex; 
                         align-items: center; 
