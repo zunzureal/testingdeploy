@@ -124,7 +124,7 @@ const MapContents = () => {
             {isSidebarVisible && (
                 <div style={{
                     flex: 'none', // เปลี่ยนเป็น 'none' ทั้ง mobile และ desktop เพื่อให้ใช้ width ที่กำหนด
-                    width: isMobile ? '180px' : '180px', // ลดขนาด desktop จาก 220px เป็น 80px
+                    width: isMobile ? '180px' : '280px', // ลดขนาด desktop จาก 220px เป็น 80px
                     height: '100vh',
                     padding: isMobile ? '8px' : '5px', // ลด padding desktop ให้เหมาะสมกับขนาดที่เล็กลง
                     fontSize: isMobile ? '14px' : '18px',
