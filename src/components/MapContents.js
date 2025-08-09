@@ -44,9 +44,24 @@ const MapContents = () => {
     const [markerPosition, setMarkerPosition] = useState(null);
     const [isSidebarVisible, setIsSidebarVisible] = useState(true);
     const [popupInfo, setPopupInfo] = useState({ feature: null, position: null });
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
     useEffect(() => {
         document.title = "แผนที่แสดงเอกสารสิทธิ์และพื้นที่ทับซ้อน";
+        
+        const handleResize = () => {
+            const mobile = window.innerWidth <= 768;
+            setIsMobile(mobile);
+            // ปิด sidebar อัตโนมัติในมือถือ
+            if (mobile) {
+                setIsSidebarVisible(false);
+            }
+        };
+        
+        window.addEventListener('resize', handleResize);
+        handleResize(); // เรียกเพื่อตั้งค่าเริ่มต้น
+        
+        return () => window.removeEventListener('resize', handleResize);
     }, []);
 
     const handleMapClick = (e) => {
@@ -103,60 +118,88 @@ const MapContents = () => {
     };
 
     return (
-        <div style={{ display: 'flex', height: '100vh', backgroundColor: '#ffffffff' }}>
+        <div style={{ 
+            display: 'flex', 
+            height: '100vh', 
+            backgroundColor: '#ffffffff',
+            flexDirection: isMobile ? 'column' : 'row'
+        }}>
             {isSidebarVisible && (
                 <div style={{
-                    flex: 1,
-                    padding: '10px',
-                    fontSize: '18px',
-                    fontFamily: "'iannnnnPDF2008', sans-serif",
+                    flex: isMobile ? 'none' : 1,
+                    height: isMobile ? 'auto' : '100vh',
+                    maxHeight: isMobile ? '40vh' : 'none',
+                    overflow: isMobile ? 'auto' : 'visible',
+                    padding: isMobile ? '8px' : '10px',
+                    fontSize: isMobile ? '14px' : '18px',
+                    fontFamily: "'THSarabun', sans-serif",
                     textAlign: 'center',
                     lineHeight: '0',
-                    position: 'relative'
+                    position: 'relative',
+                    borderBottom: isMobile ? '1px solid #ccc' : 'none'
                 }}>
                     <p style={{ lineHeight: '1' }}>
-                        <img src={`${process.env.PUBLIC_URL}/assets/logo.png`} alt="Logo" style={{ height: '150px' }} />
+                        <img 
+                            src={`${process.env.PUBLIC_URL}/assets/logo.png`} 
+                            alt="Logo" 
+                            style={{ 
+                                height: isMobile ? '80px' : '150px',
+                                maxWidth: '100%',
+                                objectFit: 'contain'
+                            }} 
+                        />
                     </p>
-                    <p style={{ fontSize: '24px', color: 'black', lineHeight: '1.6' }}>
-                        คลินิกและร้านขายยา< br />สิทธิ 30 บาท และประกันสังคม
+                    <p style={{ 
+                        fontSize: isMobile ? '16px' : '24px', 
+                        color: 'black', 
+                        lineHeight: '1.6',
+                        margin: isMobile ? '5px 0' : '10px 0'
+                    }}>
+                        คลินิกและร้านขายยา<br />สิทธิ 30 บาท และประกันสังคม
                     </p>
-                    <p style={{ lineHeight: '1.6' }}>
+                    <div style={{ lineHeight: '1.6' }}>
                         <LandList onSelectFeature={handleSelectFeature} />
-                    </p>
+                    </div>
                     <button onClick={toggleSidebar} style={{
                         position: 'absolute',
                         zIndex: 1000,
-                        top: '50%',
-                        right: '-20px',
-                        transform: 'translateY(-50%)',
+                        top: isMobile ? '5px' : '50%',
+                        right: isMobile ? '5px' : '-20px',
+                        transform: isMobile ? 'none' : 'translateY(-50%)',
                         backgroundColor: 'white',
                         color: 'black',
                         border: '1px solid black',
                         borderRadius: '5px',
-                        padding: '10px',
-                        cursor: 'pointer'
+                        padding: isMobile ? '5px 8px' : '10px',
+                        cursor: 'pointer',
+                        fontSize: isMobile ? '12px' : '16px'
                     }}>
-                        {'<'}
+                        {isMobile ? '×' : '<'}
                     </button>
                 </div>
             )}
 
-            <div style={{ flex: isSidebarVisible ? 3 : 1 }}>
+            <div style={{ 
+                flex: isMobile ? 1 : (isSidebarVisible ? 3 : 1),
+                height: isMobile ? (isSidebarVisible ? '60vh' : '100vh') : '100vh',
+                position: 'relative'
+            }}>
                 {!isSidebarVisible && (
                     <button onClick={toggleSidebar} style={{
                         position: 'absolute',
                         zIndex: 1000,
-                        top: '50%',
+                        top: isMobile ? '10px' : '50%',
                         left: '10px',
-                        transform: 'translateY(-50%)',
+                        transform: isMobile ? 'none' : 'translateY(-50%)',
                         backgroundColor: 'white',
                         color: 'black',
                         border: '1px solid black',
                         borderRadius: '5px',
-                        padding: '10px',
-                        cursor: 'pointer'
+                        padding: isMobile ? '8px 12px' : '10px',
+                        cursor: 'pointer',
+                        fontSize: isMobile ? '14px' : '16px'
                     }}>
-                        {'>'}
+                        {isMobile ? 'เมนู' : '>'}
                     </button>
                 )}
                 <MapContainer

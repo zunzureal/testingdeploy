@@ -1,7 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import html2canvas from 'html2canvas'; // เพิ่มบรรทัดนี้
 
 const MapPopup = ({ feature, onClose, popupInfo }) => {
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+        
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     if (!feature) return null;
 
 
@@ -42,46 +53,72 @@ const MapPopup = ({ feature, onClose, popupInfo }) => {
     return (
         <div style={{
             position: 'absolute',
-            bottom: '20px',
-            right: '20px',
+            bottom: isMobile ? '10px' : '20px',
+            right: isMobile ? '10px' : '20px',
+            left: isMobile ? '10px' : 'auto',
             background: 'white',
-            padding: '10px',
-            borderRadius: '5px',
-            boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
+            padding: isMobile ? '15px' : '20px',
+            borderRadius: '8px',
+            boxShadow: '0 4px 15px rgba(0,0,0,0.3)',
             zIndex: 9999,
-            maxWidth: '250px'
+            maxWidth: isMobile ? 'none' : '350px',
+            width: isMobile ? 'auto' : 'auto',
+            maxHeight: isMobile ? '50vh' : '70vh',
+            overflowY: 'auto',
+            fontFamily: "'THSarabun', sans-serif"
         }}>
             <button onClick={onClose} style={{
                 position: 'absolute',
-                top: '5px',
-                right: '5px',
-                background: 'transparent',
+                top: '8px',
+                right: '8px',
+                background: '#ff4444',
+                color: 'white',
                 border: 'none',
-                fontSize: '18px',
+                borderRadius: '50%',
+                fontSize: isMobile ? '16px' : '18px',
                 cursor: 'pointer',
-                width: '28px',
-                height: '28px',
-                lineHeight: '24px',
-                textAlign: 'center'
+                width: isMobile ? '30px' : '32px',
+                height: isMobile ? '30px' : '32px',
+                lineHeight: '1',
+                textAlign: 'center',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
             }}>×</button>
             <button onClick={handleSaveImage} title="บันทึกภาพ" style={{
                 position: 'absolute',
-                top: '3px',
-                right: '25px',
-                background: 'transparent',
-                color: 'black',
+                top: '8px',
+                right: isMobile ? '45px' : '50px',
+                background: '#4CAF50',
+                color: 'white',
                 border: 'none',
-                fontSize: '12px',
-                width: '28px',
-                height: '28px',
+                borderRadius: '4px',
+                fontSize: isMobile ? '10px' : '12px',
+                width: isMobile ? '30px' : '32px',
+                height: isMobile ? '30px' : '32px',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center'
-            }}>P</button>
-            <div id="popup-print-content" style={{ margin: 0, padding: 0, background: 'white', borderRadius: 0 }}>
+            }}>📷</button>
+            <div id="popup-print-content" style={{ 
+                margin: 0, 
+                padding: 0, 
+                background: 'white', 
+                borderRadius: 0,
+                paddingTop: isMobile ? '45px' : '40px'
+            }}>
                 {popupName && (
-                    <div style={{ fontWeight: 'bold', fontSize: '18px', marginBottom: 8, color: '#1a237e' }}>{popupName}</div>
+                    <div style={{ 
+                        fontWeight: 'bold', 
+                        fontSize: isMobile ? '20px' : '22px', 
+                        marginBottom: isMobile ? '12px' : '15px', 
+                        color: '#1a237e',
+                        lineHeight: '1.3',
+                        wordWrap: 'break-word'
+                    }}>
+                        {popupName}
+                    </div>
                 )}
                 {/* แสดงรูปภาพถ้ามี Image URL และเป็น http */}
                 {data["Image URL"] && typeof data["Image URL"] === 'string' && data["Image URL"].startsWith("http") && (
@@ -89,16 +126,24 @@ const MapPopup = ({ feature, onClose, popupInfo }) => {
                         src={data["Image URL"]}
                         alt="img"
                         style={{
-                            width: 200,
-                            height: 200,
+                            width: isMobile ? '100%' : '280px',
+                            height: isMobile ? 'auto' : '200px',
+                            maxHeight: isMobile ? '200px' : '200px',
                             objectFit: 'cover',
-                            borderRadius: 10,
+                            borderRadius: '8px',
                             display: 'block',
-                            margin: '0 auto 8px auto'
+                            margin: isMobile ? '0 auto 12px auto' : '0 auto 15px auto'
                         }}
                     />
                 )}
-                <div dangerouslySetInnerHTML={{ __html: popupContent }} />
+                <div 
+                    style={{
+                        fontSize: isMobile ? '16px' : '16px',
+                        lineHeight: '1.5',
+                        wordWrap: 'break-word'
+                    }}
+                    dangerouslySetInnerHTML={{ __html: popupContent }} 
+                />
             </div>
         </div>
     );

@@ -6,6 +6,16 @@ const LandList = ({ onSelectFeature }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [allData, setAllData] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+        
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     useEffect(() => {
         // โหลดข้อมูลจากทั้ง 2 ไฟล์ CSV เมื่อ component mount
@@ -54,41 +64,46 @@ const LandList = ({ onSelectFeature }) => {
         <div style={{
             width: '100%',
             height: '100%',
-            padding: '10px',
-            fontSize: '12px',
+            padding: isMobile ? '5px' : '10px',
+            fontSize: isMobile ? '14px' : '16px',
             fontWeight: 'normal',
             background: 'white',
             boxSizing: 'border-box',
-            fontFamily: "'iannnnnPDF2008', sans-serif"
+            fontFamily: "'THSarabun', sans-serif"
         }}>
             <h3 style={{
-                fontSize: '16px',
+                fontSize: isMobile ? '16px' : '18px',
                 fontWeight: 'normal',
-                fontFamily: "'iannnnnPDF2008', sans-serif",
+                fontFamily: "'THSarabun', sans-serif",
                 color: 'black',
-                lineHeight: '0'
-            }}
-            >ค้นหาคลินิกหรือร้านขายยา</h3>
+                lineHeight: '1.2',
+                margin: isMobile ? '5px 0' : '10px 0'
+            }}>
+                ค้นหาคลินิกหรือร้านขายยา
+            </h3>
             <input
                 type="text"
                 placeholder="กรอกชื่อคลินิกหรือร้านขายยา..."
                 value={searchTerm}
                 onChange={handleSearchChange}
                 style={{
-                    width: '95%',
-                    padding: '8px',
+                    width: '100%',
+                    padding: isMobile ? '10px' : '12px',
                     fontWeight: 'normal',
-                    marginBottom: '10px',
+                    marginBottom: isMobile ? '5px' : '10px',
                     borderRadius: '5px',
                     border: '1px solid #ccc',
-                    fontFamily: "'iannnnnPDF2008', sans-serif"
+                    fontFamily: "'THSarabun', sans-serif",
+                    fontSize: isMobile ? '16px' : '16px',
+                    boxSizing: 'border-box'
                 }}
             />
             {filteredData.length > 0 && (
                 <ul style={{
                     listStyle: 'none',
-                    padding: '5px',
-                    maxHeight: '325px',
+                    padding: '0',
+                    margin: '0',
+                    maxHeight: isMobile ? '200px' : '325px',
                     overflowY: 'auto',
                     border: '1px solid #ccc',
                     borderRadius: '5px',
@@ -98,13 +113,35 @@ const LandList = ({ onSelectFeature }) => {
                         <li key={index}
                             onClick={() => handleSelect(feature)}
                             style={{
-                                padding: '8px',
+                                padding: isMobile ? '10px 8px' : '12px 10px',
                                 cursor: 'pointer',
-                                borderBottom: '1px solid #ddd',
-                                textAlign: 'left'
+                                borderBottom: index < filteredData.length - 1 ? '1px solid #ddd' : 'none',
+                                textAlign: 'left',
+                                fontSize: isMobile ? '14px' : '16px',
+                                lineHeight: '1.3',
+                                wordWrap: 'break-word',
+                                display: 'flex',
+                                flexDirection: isMobile ? 'column' : 'row',
+                                alignItems: isMobile ? 'flex-start' : 'center'
+                            }}
+                            onMouseEnter={(e) => e.target.style.backgroundColor = '#f5f5f5'}
+                            onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+                        >
+                            <span style={{ 
+                                fontWeight: 'bold',
+                                marginBottom: isMobile ? '2px' : '0',
+                                flex: 1
                             }}>
-                            {feature["ชื่อ"]}
-                            <span style={{ marginLeft: '8px' }}>({feature["Class"]})</span>
+                                {feature["ชื่อ"]}
+                            </span>
+                            <span style={{ 
+                                marginLeft: isMobile ? '0' : '8px',
+                                fontSize: isMobile ? '12px' : '14px',
+                                color: '#666',
+                                fontStyle: 'italic'
+                            }}>
+                                ({feature["Class"]})
+                            </span>
                         </li>
                     ))}
                 </ul>
