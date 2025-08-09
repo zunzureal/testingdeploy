@@ -161,7 +161,7 @@ const MapContents = () => {
                         position: 'absolute',
                         zIndex: 1000,
                         top: isMobile ? '5px' : '50%',
-                        right: isMobile ? '5px' : '-20px',
+                        right: isMobile ? '5px' : '100px',
                         transform: isMobile ? 'none' : 'translateY(-50%)',
                         backgroundColor: 'white',
                         color: 'black',
@@ -238,12 +238,14 @@ const MapContents = () => {
                     <MapZoomToFeature feature={selectedFeature} markerPosition={markerPosition} />
                     <MapLegend />
                     
-                    {selectedFeature && <MapPopup feature={selectedFeature} markerPosition={markerPosition} onClose={handleClosePopup} />}
-                    {popupInfo.feature && popupInfo.position && (
-                        <MapPopup feature={popupInfo.feature} markerPosition={popupInfo.position} onClose={() => setPopupInfo({ feature: null, position: null })} />
-                    )}
                     {/* ไม่ต้องแสดง Marker ซ้ำ ให้ซูมไปยัง point อย่างเดียว */}
                 </MapContainer>
+                
+                {/* ย้าย popup ออกมานอก MapContainer */}
+                {selectedFeature && <MapPopup feature={selectedFeature} markerPosition={markerPosition} onClose={handleClosePopup} />}
+                {popupInfo.feature && popupInfo.position && (
+                    <MapPopup feature={popupInfo.feature} markerPosition={popupInfo.position} onClose={() => setPopupInfo({ feature: null, position: null })} />
+                )}
             </div>
         </div>
     );

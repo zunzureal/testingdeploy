@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import html2canvas from 'html2canvas'; // เพิ่มบรรทัดนี้
+import React, { useState, useEffect, useRef } from 'react';
+import html2canvas from 'html2canvas';
 
 const MapPopup = ({ feature, onClose, popupInfo }) => {
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+    const popupRef = useRef(null);
 
     useEffect(() => {
         const handleResize = () => {
@@ -11,6 +12,41 @@ const MapPopup = ({ feature, onClose, popupInfo }) => {
         
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    // ป้องกัน event bubbling และ map interaction
+    const handlePopupInteraction = (e) => {
+        e.stopPropagation();
+        // อนุญาตให้เลื่อนภายใน popup แต่ป้องกันไม่ให้ส่งผลต่อแผนที่
+        if (e.type === 'wheel' || e.type === 'touchmove') {
+            const target = e.currentTarget;
+            const scrollTop = target.scrollTop;
+            const scrollHeight = target.scrollHeight;
+            const height = target.clientHeight;
+            const atTop = scrollTop === 0;
+            const atBottom = scrollTop >= scrollHeight - height;
+            
+            // ถ้าเลื่อนถึงขอบแล้วยังพยายามเลื่อนต่อ ให้ป้องกัน
+            if ((atTop && e.deltaY < 0) || (atBottom && e.deltaY > 0)) {
+                e.preventDefault();
+            }
+        }
+    };
+
+    const handleButtonClick = (e) => {
+        e.stopPropagation();
+    };
+
+    useEffect(() => {
+        const popupElement = popupRef.current;
+        if (popupElement) {
+            // เพิ่ม event listeners เพื่อป้องกัน map interaction เฉพาะ wheel event
+            popupElement.addEventListener('wheel', handlePopupInteraction, { passive: false });
+            
+            return () => {
+                popupElement.removeEventListener('wheel', handlePopupInteraction);
+            };
+        }
     }, []);
 
     if (!feature) return null;
@@ -51,26 +87,33 @@ const MapPopup = ({ feature, onClose, popupInfo }) => {
 
 
     return (
-        <div style={{
-            position: 'absolute',
-            bottom: isMobile ? '5px' : '20px',
-            right: isMobile ? '5px' : '20px',
-            left: isMobile ? '5px' : 'auto',
-            background: 'white',
-            padding: isMobile ? '10px' : '20px',
-            borderRadius: '8px',
-            boxShadow: '0 4px 15px rgba(0,0,0,0.3)',
-            zIndex: 9999,
-            maxWidth: isMobile ? 'none' : '350px',
-            width: isMobile ? 'auto' : 'auto',
-            maxHeight: isMobile ? '60vh' : '70vh', // เพิ่มความสูงในมือถือ
-            overflowY: 'auto',
-            fontFamily: "'THSarabun', sans-serif",
-            // เพิ่ม CSS สำหรับ smooth scrolling
-            scrollBehavior: 'smooth',
-            WebkitOverflowScrolling: 'touch' // สำหรับ iOS
-        }}>
-            <button onClick={onClose} style={{
+        <div 
+            ref={popupRef}
+            className="custom-popup"
+            onWheel={handlePopupInteraction}
+            style={{
+                position: 'fixed', // เปลี่ยนจาก absolute เป็น fixed
+                bottom: isMobile ? '5px' : '20px',
+                right: isMobile ? '5px' : '20px',
+                left: isMobile ? '5px' : 'auto',
+                background: 'white',
+                padding: isMobile ? '10px' : '20px',
+                borderRadius: '8px',
+                boxShadow: '0 4px 15px rgba(0,0,0,0.3)',
+                zIndex: 10000, // เพิ่ม z-index
+                maxWidth: isMobile ? 'none' : '350px',
+                width: isMobile ? 'auto' : 'auto',
+                maxHeight: isMobile ? '70vh' : '70vh',
+                overflowY: 'auto',
+                fontFamily: "'THSarabun', sans-serif",
+                // เพิ่ม CSS สำหรับ smooth scrolling
+                scrollBehavior: 'smooth',
+                WebkitOverflowScrolling: 'touch', // สำหรับ iOS
+                // ป้องกันการ interaction กับแผนที่
+                pointerEvents: 'auto'
+            }}
+        >
+            <button onClick={(e) => { handleButtonClick(e); onClose(); }} style={{
                 position: 'absolute',
                 top: '8px',
                 right: '8px',
@@ -88,7 +131,7 @@ const MapPopup = ({ feature, onClose, popupInfo }) => {
                 alignItems: 'center',
                 justifyContent: 'center'
             }}>×</button>
-            <button onClick={handleSaveImage} title="บันทึกภาพ" style={{
+            <button onClick={(e) => { handleButtonClick(e); handleSaveImage(); }} title="บันทึกภาพ" style={{
                 position: 'absolute',
                 top: '8px',
                 right: isMobile ? '45px' : '50px',
