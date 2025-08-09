@@ -64,15 +64,8 @@ const MapPopup = ({ feature, onClose, popupInfo }) => {
             if (key === 'ความชันเฉลี่ย (Degree)mean') {
                 value = parseFloat(value).toFixed(3);
             }
-            // เพิ่มการตรวจสอบค่าว่างสำหรับคอลัมน์ 30 บาท และ ประกันสังคม
-            if (['ประกันสุขภาพ 30 บาท', 'ประกันสังคม'].includes(key)) {
-                if (!value || value.trim() === '' || value === 'ไม่มี' || value === 'ไม่รับสิทธิ์') {
-                    return null; // ไม่แสดงถ้าไม่มีข้อมูล
-                }
-            }
             return `<strong>${key}:</strong> ${value || 'ไม่ระบุ'}`;
         })
-        .filter(item => item !== null) // กรองออกรายการที่เป็น null
         .join('<br/>') : '';
 
     // ฟังก์ชันสำหรับบันทึกภาพ popup
