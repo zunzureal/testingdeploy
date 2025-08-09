@@ -55,7 +55,7 @@ const MapPopup = ({ feature, onClose, popupInfo }) => {
     // รองรับทั้ง feature ที่มี properties (GeoJSON) และ object ธรรมดา (CSV point)
     const data = feature && feature.properties ? feature.properties : feature;
     const popupContent = data && typeof data === 'object' ? Object.entries(data)
-        .filter(([key]) => !['type', 'Image URL', 'Class'].includes(key))
+        .filter(([key]) => !['type', 'Image URL', 'Class', 'P_30bant', 'P_ss', 'lat', 'long'].includes(key))
         .map(([key, value]) => {
             // ถ้าเป็นคอลัมน์เวลาให้บริการ ให้แสดงแต่หัวคอลัมน์เท่านั้น
             if (['Time', 'เวลาให้บริการ', 'เวลา'].includes(key.trim())) {
@@ -64,8 +64,15 @@ const MapPopup = ({ feature, onClose, popupInfo }) => {
             if (key === 'ความชันเฉลี่ย (Degree)mean') {
                 value = parseFloat(value).toFixed(3);
             }
+            // เพิ่มการตรวจสอบค่าว่างสำหรับคอลัมน์ 30 บาท และ ประกันสังคม
+            if (['ประกันสุขภาพ 30 บาท', 'ประกันสังคม'].includes(key)) {
+                if (!value || value.trim() === '' || value === 'ไม่มี' || value === 'ไม่รับสิทธิ์') {
+                    return null; // ไม่แสดงถ้าไม่มีข้อมูล
+                }
+            }
             return `<strong>${key}:</strong> ${value || 'ไม่ระบุ'}`;
         })
+        .filter(item => item !== null) // กรองออกรายการที่เป็น null
         .join('<br/>') : '';
 
     // ฟังก์ชันสำหรับบันทึกภาพ popup
