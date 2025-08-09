@@ -34,7 +34,7 @@ const CSVFileLocal = (props) => {
 
     const fetchData = async () => {
         const file1 = process.env.PUBLIC_URL + '/assets/pointclinic.csv'
-        const file2 = process.env.PUBLIC_URL + '/assets/pointpharmacy.csv'
+        const file2 = process.env.PUBLIC_URL + '/assets/pharmacy.csv'
 
         const res1 = await fetch(file1)
         const text1 = await res1.text();
@@ -62,27 +62,36 @@ const CSVFileLocal = (props) => {
         setData(combined)
     }
 
-  const { type } = props;
-    let markers = [];
-    if (type === "thirty") {
-        markers = data.filter(item =>
-            item["สิทธิประกันสุขภาพ 30 บาท"] && item["สิทธิประกันสุขภาพ 30 บาท"] !== "ไม่รับสิทธิ์" &&
-            (!item["สิทธิประกันสังคม"] || item["สิทธิประกันสังคม"] === "ไม่รับสิทธิ์")
-        );
-    } else if (type === "ss") {
-        markers = data.filter(item =>
-            item["สิทธิประกันสังคม"] && item["สิทธิประกันสังคม"] !== "ไม่รับสิทธิ์" &&
-            (!item["สิทธิประกันสุขภาพ 30 บาท"] || item["สิทธิประกันสุขภาพ 30 บาท"] === "ไม่รับสิทธิ์")
-        );
-    } else if (type === "both") {
-        markers = data.filter(item =>
-            item["สิทธิประกันสุขภาพ 30 บาท"] && item["สิทธิประกันสุขภาพ 30 บาท"] !== "ไม่รับสิทธิ์" &&
-            item["สิทธิประกันสังคม"] && item["สิทธิประกันสังคม"] !== "ไม่รับสิทธิ์"
-        );
-    } else {
-        markers = data;
-    }
+const { type } = props;
+let markers = [];
 
+const filterAndOmitColumns = (items) =>
+    items.map(({ P_30bant, P_ss, ...rest }) => rest); // ลบ P_30bant และ P_ss
+
+if (type === "thirty") {
+    markers = filterAndOmitColumns(
+        data.filter(item =>
+            item["P_30bant"] && item["P_30bant"] !== "ไม่มี" &&
+            (!item["P_ss"] || item["P_ss"] === "ไม่มี")
+        )
+    );
+} else if (type === "ss") {
+    markers = filterAndOmitColumns(
+        data.filter(item =>
+            item["P_ss"] && item["P_ss"] !== "ไม่มี" &&
+            (!item["P_30bant"] || item["P_30bant"] === "ไม่มี")
+        )
+    );
+} else if (type === "both") {
+    markers = filterAndOmitColumns(
+        data.filter(item =>
+            item["P_30bant"] && item["P_30bant"] !== "ไม่มี" &&
+            item["P_ss"] && item["P_ss"] !== "ไม่มี"
+        )
+    );
+} else {
+    markers = filterAndOmitColumns(data);
+}
     const [popupInfo, setPopupInfo] = useState({ feature: null, position: null });
     const popupRefs = useRef({});
 
