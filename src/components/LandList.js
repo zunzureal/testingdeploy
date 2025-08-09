@@ -72,29 +72,29 @@ const LandList = ({ onSelectFeature }) => {
             fontFamily: "'THSarabun', sans-serif"
         }}>
             <h3 style={{
-                fontSize: isMobile ? '16px' : '18px',
+                fontSize: isMobile ? '14px' : '18px',
                 fontWeight: 'normal',
                 fontFamily: "'THSarabun', sans-serif",
                 color: 'black',
                 lineHeight: '1.2',
                 margin: isMobile ? '5px 0' : '10px 0'
             }}>
-                ค้นหาคลินิกหรือร้านขายยา
+                ค้นหาคลินิก/ร้านขายยา
             </h3>
             <input
                 type="text"
-                placeholder="กรอกชื่อคลินิกหรือร้านขายยา..."
+                placeholder={isMobile ? "ชื่อคลินิก/ร้านขายยา..." : "กรอกชื่อคลินิกหรือร้านขายยา..."}
                 value={searchTerm}
                 onChange={handleSearchChange}
                 style={{
                     width: '100%',
-                    padding: isMobile ? '10px' : '12px',
+                    padding: isMobile ? '8px' : '12px',
                     fontWeight: 'normal',
                     marginBottom: isMobile ? '5px' : '10px',
                     borderRadius: '5px',
                     border: '1px solid #ccc',
                     fontFamily: "'THSarabun', sans-serif",
-                    fontSize: isMobile ? '16px' : '16px',
+                    fontSize: isMobile ? '14px' : '16px',
                     boxSizing: 'border-box'
                 }}
             />
@@ -113,35 +113,30 @@ const LandList = ({ onSelectFeature }) => {
                         <li key={index}
                             onClick={() => handleSelect(feature)}
                             style={{
-                                padding: isMobile ? '10px 8px' : '12px 10px',
+                                padding: isMobile ? '8px 6px' : '12px 10px',
                                 cursor: 'pointer',
                                 borderBottom: index < filteredData.length - 1 ? '1px solid #ddd' : 'none',
                                 textAlign: 'left',
-                                fontSize: isMobile ? '14px' : '16px',
+                                fontSize: isMobile ? '12px' : '14px',
                                 lineHeight: '1.3',
-                                wordWrap: 'break-word',
-                                display: 'flex',
-                                flexDirection: isMobile ? 'column' : 'row',
-                                alignItems: isMobile ? 'flex-start' : 'center'
+                                wordWrap: 'break-word'
                             }}
                             onMouseEnter={(e) => e.target.style.backgroundColor = '#f5f5f5'}
                             onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
                         >
-                            <span style={{ 
+                            <div style={{ 
                                 fontWeight: 'bold',
-                                marginBottom: isMobile ? '2px' : '0',
-                                flex: 1
+                                marginBottom: '2px'
                             }}>
                                 {feature["ชื่อ"]}
-                            </span>
-                            <span style={{ 
-                                marginLeft: isMobile ? '0' : '8px',
-                                fontSize: isMobile ? '12px' : '14px',
+                            </div>
+                            <div style={{ 
+                                fontSize: isMobile ? '10px' : '12px',
                                 color: '#666',
                                 fontStyle: 'italic'
                             }}>
                                 ({feature["Class"]})
-                            </span>
+                            </div>
                         </li>
                     ))}
                 </ul>

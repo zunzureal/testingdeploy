@@ -52,10 +52,7 @@ const MapContents = () => {
         const handleResize = () => {
             const mobile = window.innerWidth <= 768;
             setIsMobile(mobile);
-            // ปิด sidebar อัตโนมัติในมือถือ
-            if (mobile) {
-                setIsSidebarVisible(false);
-            }
+            // ไม่ปิด sidebar อัตโนมัติในมือถือแล้ว - ให้ผู้ใช้เลือกเอง
         };
         
         window.addEventListener('resize', handleResize);
@@ -122,37 +119,37 @@ const MapContents = () => {
             display: 'flex', 
             height: '100vh', 
             backgroundColor: '#ffffffff',
-            flexDirection: isMobile ? 'column' : 'row'
+            flexDirection: 'row' // เก็บเป็น row ทุกขนาดหน้าจอ
         }}>
             {isSidebarVisible && (
                 <div style={{
                     flex: isMobile ? 'none' : 1,
-                    height: isMobile ? 'auto' : '100vh',
-                    maxHeight: isMobile ? '40vh' : 'none',
-                    overflow: isMobile ? 'auto' : 'visible',
+                    width: isMobile ? '280px' : 'auto', // กำหนดความกว้างคงที่ในมือถือ
+                    height: '100vh',
+                    overflow: 'auto', // ให้เลื่อนได้เมื่อเนื้อหาเยอะ
                     padding: isMobile ? '8px' : '10px',
                     fontSize: isMobile ? '14px' : '18px',
                     fontFamily: "'THSarabun', sans-serif",
                     textAlign: 'center',
                     lineHeight: '0',
                     position: 'relative',
-                    borderBottom: isMobile ? '1px solid #ccc' : 'none'
+                    borderRight: '1px solid #ccc' // เพิ่มเส้นแบ่งด้านขวา
                 }}>
                     <p style={{ lineHeight: '1' }}>
                         <img 
                             src={`${process.env.PUBLIC_URL}/assets/logo.png`} 
                             alt="Logo" 
                             style={{ 
-                                height: isMobile ? '80px' : '150px',
+                                height: isMobile ? '60px' : '150px', // ลดขนาดโลโก้ในมือถือ
                                 maxWidth: '100%',
                                 objectFit: 'contain'
                             }} 
                         />
                     </p>
                     <p style={{ 
-                        fontSize: isMobile ? '16px' : '24px', 
+                        fontSize: isMobile ? '14px' : '24px', 
                         color: 'black', 
-                        lineHeight: '1.6',
+                        lineHeight: '1.4',
                         margin: isMobile ? '5px 0' : '10px 0'
                     }}>
                         คลินิกและร้านขายยา<br />สิทธิ 30 บาท และประกันสังคม
@@ -180,26 +177,26 @@ const MapContents = () => {
             )}
 
             <div style={{ 
-                flex: isMobile ? 1 : (isSidebarVisible ? 3 : 1),
-                height: isMobile ? (isSidebarVisible ? '60vh' : '100vh') : '100vh',
+                flex: 1, // ให้แผนที่ใช้พื้นที่ที่เหลือ
+                height: '100vh',
                 position: 'relative'
             }}>
                 {!isSidebarVisible && (
                     <button onClick={toggleSidebar} style={{
                         position: 'absolute',
                         zIndex: 1000,
-                        top: isMobile ? '10px' : '50%',
+                        top: '10px',
                         left: '10px',
-                        transform: isMobile ? 'none' : 'translateY(-50%)',
                         backgroundColor: 'white',
                         color: 'black',
                         border: '1px solid black',
                         borderRadius: '5px',
-                        padding: isMobile ? '8px 12px' : '10px',
+                        padding: isMobile ? '8px 12px' : '10px 15px',
                         cursor: 'pointer',
-                        fontSize: isMobile ? '14px' : '16px'
+                        fontSize: isMobile ? '14px' : '16px',
+                        boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
                     }}>
-                        {isMobile ? 'เมนู' : '>'}
+                        {isMobile ? 'เมนู' : 'แสดงเมนู'}
                     </button>
                 )}
                 <MapContainer
