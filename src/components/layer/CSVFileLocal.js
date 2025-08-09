@@ -36,30 +36,46 @@ const CSVFileLocal = (props) => {
         const file1 = process.env.PUBLIC_URL + '/assets/pointclinic.csv'
         const file2 = process.env.PUBLIC_URL + '/assets/pointpharmacy.csv'
 
-        const res1 = await fetch(file1)
-        const text1 = await res1.text();
-        const json1 = Papa.parse(text1, { header: true }).data
-        const filterData1 = json1.filter(
-            item =>
-                item.long !== '' &&
-                item.lat !== '' &&
-                !isNaN(parseFloat(item.lat)) &&
-                !isNaN(parseFloat(item.long))
-        ).map(item => ({ ...item, type: 'clinic' }))
+        console.log("Debug - Fetching files:", { file1, file2 });
 
-        const res2 = await fetch(file2)
-        const text2 = await res2.text();
-        const json2 = Papa.parse(text2, { header: true }).data
-        const filterData2 = json2.filter(
-            item =>
-                item.long !== '' &&
-                item.lat !== '' &&
-                !isNaN(parseFloat(item.lat)) &&
-                !isNaN(parseFloat(item.long))
-        ).map(item => ({ ...item, type: 'pharmacy' }))
+        try {
+            const res1 = await fetch(file1)
+            console.log("Debug - Clinic file response:", res1.status, res1.ok);
+            const text1 = await res1.text();
+            console.log("Debug - Clinic file size:", text1.length, "characters");
+            const json1 = Papa.parse(text1, { header: true }).data
+            console.log("Debug - Clinic parsed data:", json1.length, "rows");
+            const filterData1 = json1.filter(
+                item =>
+                    item.long !== '' &&
+                    item.lat !== '' &&
+                    !isNaN(parseFloat(item.lat)) &&
+                    !isNaN(parseFloat(item.long))
+            ).map(item => ({ ...item, type: 'clinic' }))
+            console.log("Debug - Clinic filtered data:", filterData1.length, "valid rows");
 
-        const combined = [...filterData1, ...filterData2]
-        setData(combined)
+            const res2 = await fetch(file2)
+            console.log("Debug - Pharmacy file response:", res2.status, res2.ok);
+            const text2 = await res2.text();
+            console.log("Debug - Pharmacy file size:", text2.length, "characters");
+            const json2 = Papa.parse(text2, { header: true }).data
+            console.log("Debug - Pharmacy parsed data:", json2.length, "rows");
+            const filterData2 = json2.filter(
+                item =>
+                    item.long !== '' &&
+                    item.lat !== '' &&
+                    !isNaN(parseFloat(item.lat)) &&
+                    !isNaN(parseFloat(item.long))
+            ).map(item => ({ ...item, type: 'pharmacy' }))
+            console.log("Debug - Pharmacy filtered data:", filterData2.length, "valid rows");
+
+            const combined = [...filterData1, ...filterData2]
+            console.log("Debug - Combined data:", combined.length, "total rows");
+            console.log("Debug - Sample combined data:", combined.slice(0, 2));
+            setData(combined)
+        } catch (error) {
+            console.error("Debug - Error fetching data:", error);
+        }
     }
 
 const { type } = props;
@@ -81,7 +97,7 @@ if (type === "thirty") {
     
     const filtered = data.filter(item => {
         const hasSSRight = item["สิทธิประกันสังคม"] && item["สิทธิประกันสังคม"] !== "ไม่รับสิทธิ์";
-        const noThirtyRight = !item["สิทธิประกันสุขภาพ 30 บาท"] || item["สิทธิประกันสุขภาพ 30 บาท"] === "ไม่รับสิทธิ์";
+        // เปลี่ยนเงื่อนไข: แสดงทุกคลินิกที่รับประกันสังคม (ไม่ว่าจะรับ 30 บาทด้วยหรือไม่)
         
         if (hasSSRight) {
             console.log("Debug SS - Found SS item:", {
@@ -89,12 +105,11 @@ if (type === "thirty") {
                 ssValue: item["สิทธิประกันสังคม"],
                 thirtyValue: item["สิทธิประกันสุขภาพ 30 บาท"],
                 hasSSRight,
-                noThirtyRight,
-                passFilter: hasSSRight && noThirtyRight
+                passFilter: hasSSRight
             });
         }
         
-        return hasSSRight && noThirtyRight;
+        return hasSSRight;
     });
     
     console.log("Debug SS - Filtered items:", filtered.length, filtered);
