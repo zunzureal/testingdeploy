@@ -55,7 +55,7 @@ const MapPopup = ({ feature, onClose, popupInfo }) => {
     // รองรับทั้ง feature ที่มี properties (GeoJSON) และ object ธรรมดา (CSV point)
     const data = feature && feature.properties ? feature.properties : feature;
     const popupContent = data && typeof data === 'object' ? Object.entries(data)
-        .filter(([key]) => !['type', 'Image URL', 'Class', 'P_30bant', 'P_ss', 'lat', 'long'].includes(key))
+        .filter(([key]) => !['type', 'Image URL', 'Class', 'P_30bant', 'P_ss', 'lat', 'long', 'Search'].includes(key))
         .map(([key, value]) => {
             // ถ้าเป็นคอลัมน์เวลาให้บริการ ให้แสดงแต่หัวคอลัมน์เท่านั้น
             if (['Time', 'เวลาให้บริการ', 'เวลา'].includes(key.trim())) {
