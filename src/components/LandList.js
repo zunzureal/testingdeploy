@@ -53,14 +53,18 @@ const LandList = ({ onSelectFeature }) => {
             setFilteredData([]);
             return;
         }
+        
+        // แยกคำค้นหาโดยใช้ space และกรอง empty strings
+        const searchKeywords = searchTerm.toLowerCase().split(' ').filter(keyword => keyword.trim() !== '');
+        
         // filter ข้อมูลจาก allData โดยใช้คอลัมน์ 'ชื่อ' และ 'Search'
         const results = allData.filter(item => {
             const name = item["ชื่อ"] ? item["ชื่อ"].toString().toLowerCase() : '';
             const searchData = item["Search"] ? item["Search"].toString().toLowerCase() : '';
-            const searchTermLower = searchTerm.toLowerCase();
+            const combinedText = `${name} ${searchData}`;
             
-            // ค้นหาในทั้งชื่อและข้อมูล Search
-            return name.includes(searchTermLower) || searchData.includes(searchTermLower);
+            // ตรวจสอบว่าทุกคำในการค้นหามีอยู่ในข้อมูล
+            return searchKeywords.every(keyword => combinedText.includes(keyword));
         });
         setFilteredData(results);
     }, [searchTerm, allData]);
