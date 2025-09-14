@@ -59,14 +59,15 @@ const MapPopup = ({ feature, onClose, popupInfo }) => {
         .map(([key, value]) => {
             // ถ้าเป็นคอลัมน์เวลาให้บริการ ให้แสดงแต่หัวคอลัมน์เท่านั้น
             if (['Time', 'เวลาให้บริการ', 'เวลา'].includes(key.trim())) {
-                return `<strong>${key}</strong>`;
+                return `<div style="font-weight: 700 !important; font-family: 'THSarabun', sans-serif !important; color: #000 !important; font-size: 18px !important; margin-bottom: 4px;">${key}</div>`;
             }
             if (key === 'ความชันเฉลี่ย (Degree)mean') {
                 value = parseFloat(value).toFixed(3);
             }
-            return `<strong>${key}:</strong> ${value || 'ไม่ระบุ'}`;
+            // ทำให้เฉพาะ column header เป็นตัวหนา ส่วน value เป็นตัวปกติ
+            return `<div style="margin-bottom: 4px;"><span style="font-weight: 700 !important; font-family: 'THSarabun', sans-serif !important; color: #000 !important; font-size: 18px !important;">${key}:</span> <span style="font-weight: normal !important; color: #666; font-size: 16px;">${value || 'ไม่ระบุ'}</span></div>`;
         })
-        .join('<br/>') : '';
+        .join('') : '';
 
     // ฟังก์ชันสำหรับบันทึกภาพ popup
     const handleSaveImage = () => {

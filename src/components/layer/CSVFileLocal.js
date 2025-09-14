@@ -31,9 +31,10 @@ const CSVFileLocal = (props) => {
 
     const fetchData = async () => {
         const file1 = process.env.PUBLIC_URL + '/assets/pointclinic.csv'
-        const file2 = process.env.PUBLIC_URL + '/assets/pointpharmacy.csv'
+        // const file2 = process.env.PUBLIC_URL + '/assets/pointpharmacy.csv' // Commented out - using pharmacy.csv instead
+        const file3 = process.env.PUBLIC_URL + '/assets/pharmacy.csv'
 
-        console.log("Debug - Fetching files:", { file1, file2 });
+        console.log("Debug - Fetching files:", { file1, file3 });
 
         try {
             const res1 = await fetch(file1)
@@ -51,6 +52,8 @@ const CSVFileLocal = (props) => {
             ).map(item => ({ ...item, type: 'clinic' }))
             console.log("Debug - Clinic filtered data:", filterData1.length, "valid rows");
 
+            // Commented out pointpharmacy.csv - using pharmacy.csv instead
+            /*
             const res2 = await fetch(file2)
             console.log("Debug - Pharmacy file response:", res2.status, res2.ok);
             const text2 = await res2.text();
@@ -65,8 +68,25 @@ const CSVFileLocal = (props) => {
                     !isNaN(parseFloat(item.long))
             ).map(item => ({ ...item, type: 'pharmacy' }))
             console.log("Debug - Pharmacy filtered data:", filterData2.length, "valid rows");
+            */
 
-            const combined = [...filterData1, ...filterData2]
+            // Load the new pharmacy.csv file (replacing pointpharmacy.csv)
+            const res3 = await fetch(file3)
+            console.log("Debug - New Pharmacy file response:", res3.status, res3.ok);
+            const text3 = await res3.text();
+            console.log("Debug - New Pharmacy file size:", text3.length, "characters");
+            const json3 = Papa.parse(text3, { header: true }).data
+            console.log("Debug - New Pharmacy parsed data:", json3.length, "rows");
+            const filterData3 = json3.filter(
+                item =>
+                    item.long !== '' &&
+                    item.lat !== '' &&
+                    !isNaN(parseFloat(item.lat)) &&
+                    !isNaN(parseFloat(item.long))
+            ).map(item => ({ ...item, type: 'pharmacy' }))
+            console.log("Debug - New Pharmacy filtered data:", filterData3.length, "valid rows");
+
+            const combined = [...filterData1, ...filterData3] // Only using clinic and new pharmacy data
             console.log("Debug - Combined data:", combined.length, "total rows");
             console.log("Debug - Sample combined data:", combined.slice(0, 2));
             setData(combined)
