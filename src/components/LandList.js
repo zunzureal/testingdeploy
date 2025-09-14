@@ -18,22 +18,32 @@ const LandList = ({ onSelectFeature }) => {
     }, []);
 
     useEffect(() => {
-        // โหลดข้อมูลจากทั้ง 2 ไฟล์ CSV เมื่อ component mount
+        // โหลดข้อมูลจากทั้ง 3 ไฟล์ CSV เมื่อ component mount
         const fetchData = async () => {
             const file1 = process.env.PUBLIC_URL + '/assets/pointclinic.csv';
-            const file2 = process.env.PUBLIC_URL + '/assets/pointpharmacy.csv';
+            // const file2 = process.env.PUBLIC_URL + '/assets/pointpharmacy.csv'; // Commented out - using pharmacy.csv instead
+            const file3 = process.env.PUBLIC_URL + '/assets/pharmacy.csv';
 
             const res1 = await fetch(file1);
             const text1 = await res1.text();
             const json1 = Papa.parse(text1, { header: true }).data;
             const data1 = json1.filter(item => item["ชื่อ"] && item.lat && item.long);
 
+            // Commented out pointpharmacy.csv - using pharmacy.csv instead
+            /*
             const res2 = await fetch(file2);
             const text2 = await res2.text();
             const json2 = Papa.parse(text2, { header: true }).data;
             const data2 = json2.filter(item => item["ชื่อ"] && item.lat && item.long);
+            */
 
-            setAllData([...data1, ...data2]);
+            // Load the new pharmacy.csv file
+            const res3 = await fetch(file3);
+            const text3 = await res3.text();
+            const json3 = Papa.parse(text3, { header: true }).data;
+            const data3 = json3.filter(item => item["ชื่อ"] && item.lat && item.long);
+
+            setAllData([...data1, ...data3]); // Only using clinic and new pharmacy data
         };
         fetchData();
     }, []);
@@ -43,10 +53,15 @@ const LandList = ({ onSelectFeature }) => {
             setFilteredData([]);
             return;
         }
-        // filter ข้อมูลจาก allData โดยใช้คอลัมน์ 'ชื่อ'
-        const results = allData.filter(item =>
-            item["ชื่อ"] && item["ชื่อ"].toString().toLowerCase().includes(searchTerm.toLowerCase())
-        );
+        // filter ข้อมูลจาก allData โดยใช้คอลัมน์ 'ชื่อ' และ 'Search'
+        const results = allData.filter(item => {
+            const name = item["ชื่อ"] ? item["ชื่อ"].toString().toLowerCase() : '';
+            const searchData = item["Search"] ? item["Search"].toString().toLowerCase() : '';
+            const searchTermLower = searchTerm.toLowerCase();
+            
+            // ค้นหาในทั้งชื่อและข้อมูล Search
+            return name.includes(searchTermLower) || searchData.includes(searchTermLower);
+        });
         setFilteredData(results);
     }, [searchTerm, allData]);
 
@@ -83,7 +98,7 @@ const LandList = ({ onSelectFeature }) => {
             </h3>
             <input
                 type="text"
-                placeholder={isMobile ? "ชื่อคลินิก/ร้านขายยา..." : "กรอกชื่อคลินิกหรือร้านขายยา..."}
+                placeholder={isMobile ? "ชื่อ หรือ อาการ..." : "กรอกชื่อคลินิก/ร้านขายยา หรือ อาการที่รักษา..."}
                 value={searchTerm}
                 onChange={handleSearchChange}
                 style={{
